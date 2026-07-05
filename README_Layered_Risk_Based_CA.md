@@ -8,7 +8,7 @@ Hybrid Entra ID tenant `Google042.onmicrosoft.com` with on-prem AD `meridianiam.
 
 ## Video Walkthrough
 
-📺 **[Watch the walkthrough](INSERT_LOOM_LINK_HERE)** — full policy configuration, testing methodology, sign-in log analysis, and remediation loop demonstration.
+📺 **[Watch the walkthrough] https://youtu.be/6a1r6kqUeDc — full policy configuration, testing methodology, sign-in log analysis, and remediation loop demonstration.
 
 ## Problem
 
@@ -54,29 +54,3 @@ Post-password-change verification confirmed user risk dropped from High to none,
 **"Sign-in frequency: Every time" enforces on token refresh, not wall-clock time.** The 5-minute tolerance permits reauthentication but does not schedule it. Reauthentication prompts fire only when the user's browser attempts to acquire or refresh a token past the tolerance window, typically on navigation to a new cloud resource.
 
 **Most Conditional Access evaluations occur on non-interactive sign-ins.** Token refreshes for backend app calls are where most CA decisions get made. Analysts checking only the interactive sign-in log tab will miss the majority of policy enforcement activity.
-
-## Repository Structure
-
-```
-07-Risk-Based-Conditional-Access/
-├── README.md                       (this file)
-├── screenshots/
-│   ├── 01-Tor-Signin-Risky-Signin-View.png
-│   ├── 02-Signin-Risk-Policy-Applied-CA-Tab.png
-│   ├── 03-Reauth-Prompt-Outlook.png
-│   ├── 04-User-Risk-Policy-Applied-CA-Tab.png
-│   ├── 05-Alice-Confirmed-Compromised.png
-│   ├── 06-Password-Change-Prompt.png
-│   └── 07-Alice-Remediated-State.png
-```
-
-## Tools Used
-
-- Microsoft Entra ID (Azure AD) — Identity Protection, Conditional Access, Sign-in Logs
-- On-prem Active Directory Domain Services (meridianiam.net)
-- Microsoft Entra Connect (Password Hash Sync)
-- Tor Browser (test signal generation)
-
-## Related Certifications
-
-CompTIA Security+ · CompTIA Network+ · Microsoft AZ-104 · SC-900 · MS-900 · SC-300 (in progress)
