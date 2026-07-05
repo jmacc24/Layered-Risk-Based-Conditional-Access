@@ -16,6 +16,8 @@ Identity Protection generates two distinct risk signals — sign-in risk (per-ev
 
 - **Sign-in-risk-only** — misses compromised users signing in from familiar locations
 - **User-risk-only** — misses anomalous events targeting otherwise clean users
+<img width="999" height="614" alt="image" src="https://github.com/user-attachments/assets/95b04506-09e6-4904-8e72-f0b3c5e5a728" />
+
 
 Layering both is required for defense in depth in identity.
 
