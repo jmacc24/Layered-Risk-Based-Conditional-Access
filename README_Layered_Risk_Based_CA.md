@@ -8,7 +8,7 @@ Hybrid Entra ID tenant `Google042.onmicrosoft.com` with on-prem AD `meridianiam.
 
 ## Video Walkthrough
 
-📺 **[Watch the walkthrough] https://youtu.be/6a1r6kqUeDc — full policy configuration, testing methodology, sign-in log analysis, and remediation loop demonstration.
+📺 Watch the walkthrough: https://youtu.be/6a1r6kqUeDc — full policy configuration, testing methodology, sign-in log analysis, and remediation loop demonstration.
 
 ## Problem
 
