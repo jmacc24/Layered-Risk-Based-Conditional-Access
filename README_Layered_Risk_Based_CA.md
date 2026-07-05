@@ -1,0 +1,82 @@
+# Layered Risk-Based Conditional Access
+
+Two Entra ID Conditional Access policies enforcing access decisions on independent Identity Protection risk signals — sign-in risk and user risk — with full remediation loop tested end to end.
+
+## Environment
+
+Hybrid Entra ID tenant `Google042.onmicrosoft.com` with on-prem AD `meridianiam.net` synced via Entra Connect. Entra ID P2 for Identity Protection and risk-based Conditional Access.
+
+## Video Walkthrough
+
+📺 **[Watch the walkthrough](INSERT_LOOM_LINK_HERE)** — full policy configuration, testing methodology, sign-in log analysis, and remediation loop demonstration.
+
+## Problem
+
+Identity Protection generates two distinct risk signals — sign-in risk (per-event) and user risk (cumulative). A single Conditional Access policy scoped to only one of these signals leaves half the attack surface unmonitored:
+
+- **Sign-in-risk-only** — misses compromised users signing in from familiar locations
+- **User-risk-only** — misses anomalous events targeting otherwise clean users
+
+Layering both is required for defense in depth in identity.
+
+## Design
+
+Two policies, each targeting one risk axis, each with a distinct grant control set aligned to that axis's threat model.
+
+| Policy | Trigger | Grant Controls | Purpose |
+|--------|---------|----------------|---------|
+| `CA-Signin-Risk-High-MFA-Plus-Reauth` | Sign-in risk = High | MFA + Sign-in frequency Every time (5-min tolerance) | Catch anomalous individual sign-in events |
+| `CA-User-Risk-High-MFA-Password-Change` | User risk = High | MFA + Require password change | Enforce remediation on confirmed-compromised users |
+
+Both scoped to test user `achen@meridianiam.net`, targeting all cloud apps.
+
+## Testing Methodology
+
+Sign-in-risk policy tested by generating real Anonymous IP detections via Tor Browser sign-ins from rotating exit nodes (Karlsruhe DE, Somers NY, Anse Kerlan SC). User-risk policy tested by confirming Alice compromised in Identity Protection and signing in from a routine familiar location, isolating user risk as the only elevated signal.
+
+## Results
+
+**Sign-in-risk policy applied on Tor sign-ins:**
+Sign-in log Conditional Access tab confirmed policy match, sign-in risk scored Medium, reauthentication prompts fired on token refresh to Outlook and SharePoint after 5-minute tolerance elapsed.
+
+**User-risk policy applied on clean sign-in from confirmed-compromised user:**
+Same test user signing in from home IP with sign-in risk scored None triggered the user-risk policy because user risk was High. MFA required, password change forced, risk state remediated to normal on successful password change.
+
+**Remediation loop closed correctly:**
+Post-password-change verification confirmed user risk dropped from High to none, both policies stopped applying on subsequent sign-ins, and risk state moved to Remediated in Risky Users view.
+
+## Key Findings
+
+**Sign-in risk and user risk are independent axes.** Confirming a user compromised elevates user risk but does not re-score their future sign-ins as risky. A confirmed-compromised user signing in from a familiar location will score sign-in risk None. Policies must target both axes to enforce complete coverage.
+
+**Target Resources must be explicitly configured.** Conditional Access fails silent when Target Resources is unset — the policy exists but attaches to no authentication event and never fires. Verification requires the Conditional Access tab on the sign-in log, not the policy Impact chart alone.
+
+**"Sign-in frequency: Every time" enforces on token refresh, not wall-clock time.** The 5-minute tolerance permits reauthentication but does not schedule it. Reauthentication prompts fire only when the user's browser attempts to acquire or refresh a token past the tolerance window, typically on navigation to a new cloud resource.
+
+**Most Conditional Access evaluations occur on non-interactive sign-ins.** Token refreshes for backend app calls are where most CA decisions get made. Analysts checking only the interactive sign-in log tab will miss the majority of policy enforcement activity.
+
+## Repository Structure
+
+```
+07-Risk-Based-Conditional-Access/
+├── README.md                       (this file)
+├── screenshots/
+│   ├── 01-Tor-Signin-Risky-Signin-View.png
+│   ├── 02-Signin-Risk-Policy-Applied-CA-Tab.png
+│   ├── 03-Reauth-Prompt-Outlook.png
+│   ├── 04-User-Risk-Policy-Applied-CA-Tab.png
+│   ├── 05-Alice-Confirmed-Compromised.png
+│   ├── 06-Password-Change-Prompt.png
+│   └── 07-Alice-Remediated-State.png
+```
+
+## Tools Used
+
+- Microsoft Entra ID (Azure AD) — Identity Protection, Conditional Access, Sign-in Logs
+- On-prem Active Directory Domain Services (meridianiam.net)
+- Microsoft Entra Connect (Password Hash Sync)
+- Tor Browser (test signal generation)
+
+## Related Certifications
+
+CompTIA Security+ · CompTIA Network+ · Microsoft AZ-104 · SC-900 · MS-900 · SC-300 (in progress)
