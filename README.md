@@ -34,7 +34,14 @@ Both scoped to test user `achen@meridianiam.net`, targeting all cloud apps.
 
 ## Testing Methodology
 
-Sign-in-risk policy tested by generating real Anonymous IP detections via Tor Browser sign-ins from rotating exit nodes (Karlsruhe DE, Somers NY, Anse Kerlan SC). User-risk policy tested by confirming Alice compromised in Identity Protection and signing in from a routine familiar location, isolating user risk as the only elevated signal.
+Sign-in-risk policy tested by generating real Anonymous IP detections via Tor Browser sign-ins from rotating exit nodes (Dronten, Flevoland, NL).
+
+<img width="741" height="318" alt="image" src="https://github.com/user-attachments/assets/7e481038-ebcb-4c2d-878e-43d90dca21d3" />
+
+User-risk policy tested by confirming Alice compromised in Identity Protection and signing in from a routine familiar location, isolating user risk as the only elevated signal.
+
+<img width="745" height="284" alt="image" src="https://github.com/user-attachments/assets/793bc55b-1ecb-4992-af2c-680f7092eaa7" />
+
 
 ## Results
 
@@ -42,7 +49,15 @@ Sign-in-risk policy tested by generating real Anonymous IP detections via Tor Br
 Sign-in log Conditional Access tab confirmed policy match, sign-in risk scored Medium, reauthentication prompts fired on token refresh to Outlook and SharePoint after 5-minute tolerance elapsed.
 
 **User-risk policy applied on clean sign-in from confirmed-compromised user:**
-Same test user signing in from home IP with sign-in risk scored None triggered the user-risk policy because user risk was High. MFA required, password change forced, risk state remediated to normal on successful password change.
+Same test user signing in from home IP with sign-in risk scored None triggered the user-risk policy because user risk was High. 
+
+<img width="958" height="105" alt="image" src="https://github.com/user-attachments/assets/c41bf0fb-42a2-48c8-9615-fc5edc89ac5e" />
+
+<img width="759" height="233" alt="image" src="https://github.com/user-attachments/assets/109b4b5d-931e-4b1f-87a9-de663a7e0994" />
+
+## Resolution
+
+MFA required, password change forced, risk state remediated to normal on successful password change.
 
 **Remediation loop closed correctly:**
 Post-password-change verification confirmed user risk dropped from High to none, both policies stopped applying on subsequent sign-ins, and risk state moved to Remediated in Risky Users view.
